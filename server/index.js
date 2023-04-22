@@ -15,7 +15,7 @@ const { User } = require("./models/user");
 app.use(
   cookieSession({
     name: "session",
-    keys: ["mern-google-auth"],
+    keys: [process.env.SECRET],
     maxAge: 24 * 60 * 60 * 100,
   })
 );

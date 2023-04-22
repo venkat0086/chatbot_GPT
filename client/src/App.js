@@ -30,7 +30,7 @@ function App() {
 
   const getUser = async () => {
     try {
-      const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+      const url = `${process.env.REACT_APP_SERVER_URI}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
       console.log(data.user);
       setGoogleUser(data.user);

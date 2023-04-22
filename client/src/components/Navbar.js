@@ -35,7 +35,7 @@ const Navbar = ({ userId }) => {
       navigate("/");
       window.location.reload();
     } else {
-      window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
+      window.open(`${process.env.REACT_APP_SERVER_URI}/auth/logout`, "_self");
     }
   };
   return (

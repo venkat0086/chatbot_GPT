@@ -39,11 +39,11 @@ const LogoAvatar = ({ userName }) => {
   return (
     <div>
       <div
-        className="flex justify-center items-center w-8 h-8 rounded-full"
+        className="flex justify-center items-center w-10 h-10 rounded-full"
         style={{ backgroundColor: `${bgColor}` }}
       >
         <span className="text-white font-bold text-sm">
-          {userName.charAt(0)}
+          {userName.charAt(0).toUpperCase()}
         </span>
       </div>
     </div>
