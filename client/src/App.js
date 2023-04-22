@@ -3,28 +3,84 @@ import Chat from "./components/Chat";
 import jwt_decode from "jwt-decode";
 import Signup from "./components/Signup";
 import Login from "./components/Signin";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
-  const user = localStorage.getItem("token");
-  let userId;
+  const [googleUser, setGoogleUser] = useState(null);
+  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [manualUser, setManualUser] = useState(localStorage.getItem("token"));
 
-  if (user) {
-    const decoded = jwt_decode(user);
-    userId = decoded._id;
-  }
+  // // const manualUser = localStorage.getItem("token");
+
+  // // if (manualUser) {
+  // //   const decoded = jwt_decode(manualUser);
+  // //   setUserId(decoded._id);
+  // // }
+
+  useEffect(() => {
+    if (manualUser) {
+      const decoded = jwt_decode(manualUser);
+      setUserId(decoded._id);
+      setUser(decoded);
+    }
+  }, [manualUser]);
+
+  const getUser = async () => {
+    try {
+      const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+      const { data } = await axios.get(url, { withCredentials: true });
+      console.log(data.user);
+      setGoogleUser(data.user);
+      setUserId(data.user._id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <Routes>
-      {user && <Route path="/chat/:userId" exact element={<Chat />} />}
-      {user && (
+      <Route
+        exact
+        path="/login"
+        element={manualUser || googleUser ? <Navigate to="/" /> : <Login />}
+      />
+      <Route
+        exact
+        path="/"
+        element={
+          manualUser || googleUser ? (
+            <Navigate to={`/chat/${userId}`} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      {(manualUser || googleUser) && (
+        <Route
+          path="/chat/:userId"
+          exact
+          element={
+            <Chat userData={manualUser ? null : googleUser} manualUser={user} />
+          }
+        />
+      )}
+      {/* {user && (
         <Route
           path="/"
           exact
           element={<Navigate replace to={`/chat/${userId}`} />}
         />
-      )}
+      )} */}
       <Route path="/register" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
-      <Route path="/" element={<Navigate replace to="/login" />} />
+      {/* <Route path="/" element={<Navigate replace to="/login" />} /> */}
     </Routes>
   );
 }

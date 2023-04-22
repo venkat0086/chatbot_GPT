@@ -3,7 +3,8 @@ import { useState } from "react";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import "../Chat.css";
 import ChatGPTLogo from "../Images/chatGpt.png";
-import UserLogo from "../Images/user.png";
+import LogoAvatar from "./LogoAvatar";
+// import UserLogo from "../Images/user.png";
 import {
   MainContainer,
   ChatContainer,
@@ -17,12 +18,16 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 
-const Chat = () => {
+const Chat = ({ userData, manualUser }) => {
   const [messages, setMessages] = useState([]);
+  // const [userPic, setUserPic] = useState(UserLogo);
   const [typing, setTyping] = useState(false);
   const { userId } = useParams();
 
   useEffect(() => {
+    // if (userData) {
+    //   setUserPic(userData.picture);
+    // }
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
@@ -151,8 +156,12 @@ const Chat = () => {
                 <Message style={{ textAlign: "left" }} key={i} model={message}>
                   {message.sender === "ChatGPT" ? (
                     <Avatar src={ChatGPTLogo} name="ChatGPT" />
+                  ) : userData ? (
+                    <Avatar src={userData.picture} name="user" />
                   ) : (
-                    <Avatar src={UserLogo} name="user" />
+                    <Avatar>
+                      <LogoAvatar userName={manualUser.name} />
+                    </Avatar>
                   )}
                 </Message>
               );

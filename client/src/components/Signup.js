@@ -33,7 +33,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.REACT_APP_SERVER_URI}/api/users`;
+      const url = `${process.env.REACT_APP_SERVER_URI}/register/user`;
       const { data: res } = await axios.post(url, data);
       if (res.message) {
         handleLoading();

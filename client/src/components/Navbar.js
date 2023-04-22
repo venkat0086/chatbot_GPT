@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+// import jwt_decode from "jwt-decode";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axios from "axios";
 
@@ -21,17 +22,30 @@ const Navbar = ({ userId }) => {
     window.location.reload();
   };
 
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   navigate("/");
+  //   window.location.reload();
+  // };
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    window.location.reload();
+    const manualUser = localStorage.getItem("token");
+    if (manualUser) {
+      localStorage.removeItem("token");
+      navigate("/");
+      window.location.reload();
+    } else {
+      window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
+    }
   };
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link className="text-white text-2xl font-bold">Chatbot</Link>
+            <Link className="text-white text-2xl font-bold" to="/">
+              Chatbot
+            </Link>
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { User, validate } = require("../models/user");
 const bcrypt = require("bcrypt");
 
-router.post("/", async (req, res) => {
+router.post("/user", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error)
@@ -14,11 +14,14 @@ router.post("/", async (req, res) => {
         .status(409)
         .send({ message: "User with given email already Exist!" });
 
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const googleId = req.body.googleId;
+    if (!googleId) {
+      const salt = await bcrypt.genSalt(Number(process.env.SALT));
+      const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-    await new User({ ...req.body, password: hashPassword }).save();
-    res.status(201).send({ message: "User created successfully" });
+      await new User({ ...req.body, password: hashPassword }).save();
+      res.status(201).send({ message: "User created successfully" });
+    }
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }

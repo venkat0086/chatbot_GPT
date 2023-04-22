@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AlertPop from "./AlertPop";
 import jwt_decode from "jwt-decode";
 import Spinner from "./Spinner";
+import GoogleIcon from "../Images/google.png";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
@@ -22,11 +23,19 @@ const Login = () => {
     }, 3000);
   };
 
+  const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+    window.open(
+      `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+      "_self"
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.REACT_APP_SERVER_URI}/api/auth`;
+      const url = `${process.env.REACT_APP_SERVER_URI}/auth/api`;
       const { data: res } = await axios.post(url, data);
       localStorage.setItem("token", res.data);
       if (res) {
@@ -99,6 +108,19 @@ const Login = () => {
           >
             Login
           </button>
+          <div className="flex justify-center items-center mt-6">
+            <button
+              onClick={handleGoogleLogin}
+              className="p-2 flex bg-white border border-gray-300 rounded-md font-medium text-gray-900 hover:bg-gray-50"
+            >
+              <img
+                src={GoogleIcon}
+                alt="Google Icon"
+                className="w-6 h-6 mr-2"
+              />
+              Google
+            </button>
+          </div>
           <div className="flex justify-center items-center mt-6">
             <span className="text-sm text-gray-600 mr-2">
               Don't have an account?
