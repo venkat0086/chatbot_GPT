@@ -29,10 +29,10 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      //   callbackURL: "/auth/google/callback",
-      callbackURL: process.env.REDIRECT_URI,
+      callbackURL: "/auth/google/callback",
+      //   callbackURL: process.env.REDIRECT_URI,
       // passReqToCallback: true,
-      scope: ["profile", "email"],
+      //   scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       // Check if user already exists in database
