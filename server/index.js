@@ -32,7 +32,7 @@ passport.use(
       callbackURL: "/auth/google/callback",
       //   callbackURL: process.env.REDIRECT_URI,
       // passReqToCallback: true,
-      //   scope: ["profile", "email"],
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       // Check if user already exists in database
