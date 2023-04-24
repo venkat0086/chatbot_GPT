@@ -29,15 +29,26 @@ function App() {
   }, [manualUser]);
 
   const getUser = async () => {
-    try {
-      const url = `${process.env.REACT_APP_SERVER_URI}/auth/login/success`;
-      const { data } = await axios.get(url, { withCredentials: true });
-      console.log(data.user);
-      setGoogleUser(data.user);
-      setUserId(data.user._id);
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   const url = `${process.env.REACT_APP_SERVER_URI}/auth/login/success`;
+    //   const { data } = await axios.get(url, { withCredentials: true });
+    //   console.log(data.user);
+    //   setGoogleUser(data.user);
+    //   setUserId(data.user._id);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URI}/auth/login/success`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          setGoogleUser(res.data);
+          setUserId(res.data._id);
+        }
+      });
   };
 
   useEffect(() => {

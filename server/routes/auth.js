@@ -38,17 +38,18 @@ const validate = (data) => {
 };
 
 router.get("/login/success", (req, res) => {
-  if (req.user) {
-    const token = req.user.generateAuthToken();
-    res.status(200).json({
-      error: false,
-      message: "Successfully Loged In",
-      user: req.user,
-      data: token,
-    });
-  } else {
-    res.status(403).json({ error: true, message: "Not Authorized" });
-  }
+  // if (req.user) {
+  //   const token = req.user.generateAuthToken();
+  //   res.status(200).json({
+  //     error: false,
+  //     message: "Successfully Loged In",
+  //     user: req.user,
+  //     data: token,
+  //   });
+  // } else {
+  //   res.status(403).json({ error: true, message: "Not Authorized" });
+  // }
+  res.send(req.user);
 });
 
 router.get("/login/failed", (req, res) => {
