@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieSession = require("cookie-session");
+const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const connection = require("./db");
@@ -12,16 +13,36 @@ const authRoutes = require("./routes/auth");
 const chatUniRoutes = require("./routes/chat");
 const { User } = require("./models/user");
 
-app.use(
-  cookieSession({
-    name: "session",
-    keys: [process.env.SECRET],
-    maxAge: 24 * 60 * 60 * 100,
-  })
-);
+// app.use(
+//   cookieSession({
+//     name: "session",
+//     keys: [process.env.SECRET],
+//     maxAge: 24 * 60 * 60 * 100,
+//   })
+// );
+app.use(express.json());
 
 // database connection
 connection();
+
+app.use(express.json());
+
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+
+app.set("trust proxy", 1);
+
+app.use(
+  session({
+    secret: "secretcode",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      sameSite: "none",
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // One Week
+    },
+  })
+);
 
 // Configure passport with Google OAuth credentials
 passport.use(
@@ -71,16 +92,16 @@ passport.deserializeUser((id, done) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true,
+//   })
+// );
 
 // middlewares
-app.use(express.json());
+// app.use(express.json());
 // app.use(cors());
 
 // routes

@@ -29,16 +29,6 @@ const Login = () => {
       `${process.env.REACT_APP_SERVER_URI}/auth/google/callback`,
       "_self"
     );
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URI}/auth/login/success`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data) {
-          console.log(res.data);
-        }
-      });
   };
 
   const handleSubmit = async (e) => {
